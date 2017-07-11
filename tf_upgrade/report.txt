@@ -1,0 +1,209 @@
+================================================================================
+Input tree: '../tensorflow'
+================================================================================
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/addcen.py'
+ outputting to '../tensorflow_1.0/addcen.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/addcen.py' Line 24
+--------------------------------------------------------------------------------
+
+Renamed keyword argument from 'reduction_indices' to 'axis'
+
+    Old: loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), reduction_indices=[1]))
+                                                                         ~~~~~~~~~~~~~~~~~~      
+    New: loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), axis=[1]))
+                                                                         ~~~~~      
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/classification.py'
+ outputting to '../tensorflow_1.0/classification.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/classification.py' Line 46
+--------------------------------------------------------------------------------
+
+Renamed keyword argument from 'reduction_indices' to 'axis'
+
+    Old:     cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction),reduction_indices=[1]))
+                                                                                   ~~~~~~~~~~~~~~~~~~      
+    New:     cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction),axis=[1]))
+                                                                                   ~~~~~      
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/cnn_classification.py'
+ outputting to '../tensorflow_1.0/cnn_classification.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/cnn_classification.py' Line 59
+--------------------------------------------------------------------------------
+
+Renamed keyword argument from 'reduction_indices' to 'axis'
+
+    Old: cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction), reduction_indices=[1]))       # loss
+                                                                                ~~~~~~~~~~~~~~~~~~                   
+    New: cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction), axis=[1]))       # loss
+                                                                                ~~~~~                   
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/commonDate.py'
+ outputting to '../tensorflow_1.0/commonDate.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/normalization.py'
+ outputting to '../tensorflow_1.0/normalization.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/normalization.py' Line 123
+--------------------------------------------------------------------------------
+
+Renamed keyword argument from 'reduction_indices' to 'axis'
+
+    Old:     cost = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), reduction_indices=[1]))
+                                                                             ~~~~~~~~~~~~~~~~~~      
+    New:     cost = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), axis=[1]))
+                                                                             ~~~~~      
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/overfitting.py'
+ outputting to '../tensorflow_1.0/overfitting.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/overfitting.py' Line 39
+--------------------------------------------------------------------------------
+
+Renamed keyword argument from 'reduction_indices' to 'axis'
+
+    Old: cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction), reduction_indices=[1]))  # loss
+                                                                                ~~~~~~~~~~~~~~~~~~              
+    New: cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys * tf.log(prediction), axis=[1]))  # loss
+                                                                                ~~~~~              
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/placeholder.py'
+ outputting to '../tensorflow_1.0/placeholder.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/placeholder.py' Line 6
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.mul' to 'tf.multiply'
+
+    Old: output = tf.mul(input1, input2)
+                  ~~~~~~                 
+    New: output = tf.multiply(input1, input2)
+                  ~~~~~~~~~~~                 
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/rnn_classification.py'
+ outputting to '../tensorflow_1.0/rnn_classification.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/rnn_classification.py' Line 57
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.unpack' to 'tf.unstack'
+
+    Old:     outputs = tf.unpack(tf.transpose(outputs, [1, 0, 2]))  # states is the last outputs
+                       ~~~~~~~~~                                                                 
+    New:     outputs = tf.unstack(tf.transpose(outputs, [1, 0, 2]))  # states is the last outputs
+                       ~~~~~~~~~~                                                                 
+
+'../tensorflow/rnn_classification.py' Line 63
+--------------------------------------------------------------------------------
+
+Added keyword 'logits' to reordered function 'tf.nn.softmax_cross_entropy_with_logits'
+Added keyword 'labels' to reordered function 'tf.nn.softmax_cross_entropy_with_logits'
+
+    Old: cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
+                                                                                 
+    New: cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+                                                                       ~~~~~~~      ~~~~~~~    
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/rnn_regression.py'
+ outputting to '../tensorflow_1.0/rnn_regression.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/rnn_regression.py' Line 89
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.sub' to 'tf.subtract'
+
+    Old:         return tf.square(tf.sub(y_pre, y_target))
+                                  ~~~~~~                   
+    New:         return tf.square(tf.subtract(y_pre, y_target))
+                                  ~~~~~~~~~~~                   
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/rnn_reusevariable.py'
+ outputting to '../tensorflow_1.0/rnn_reusevariable.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/rnn_reusevariable.py' Line 80
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.sub' to 'tf.subtract'
+
+    Old:         return tf.square(tf.sub(y_pre, y_target))
+                                  ~~~~~~                   
+    New:         return tf.square(tf.subtract(y_pre, y_target))
+                                  ~~~~~~~~~~~                   
+
+'../tensorflow/rnn_reusevariable.py' Line 59
+--------------------------------------------------------------------------------
+
+Added keyword 'concat_dim' to reordered function 'tf.concat'
+Added keyword 'values' to reordered function 'tf.concat'
+
+    Old:                 cell_outputs_reshaped = tf.reshape(tf.concat(1, self.cell_outputs), [-1, self._cell_size])
+                                                                                                                    
+    New:                 cell_outputs_reshaped = tf.reshape(tf.concat(axis=1, values=self.cell_outputs), [-1, self._cell_size])
+                                                                      ~~~~~   ~~~~~~~                                           
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/sess.py'
+ outputting to '../tensorflow_1.0/sess.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/tensorboard.py'
+ outputting to '../tensorflow_1.0/tensorboard.py'
+--------------------------------------------------------------------------------
+
+'../tensorflow/tensorboard.py' Line 35
+--------------------------------------------------------------------------------
+
+Renamed keyword argument from 'reduction_indices' to 'axis'
+
+    Old:     loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), reduction_indices=[1]))
+                                                                             ~~~~~~~~~~~~~~~~~~      
+    New:     loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), axis=[1]))
+                                                                             ~~~~~      
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/us_autoencoder.py'
+ outputting to '../tensorflow_1.0/us_autoencoder.py'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Processing file '../tensorflow/variable.py'
+ outputting to '../tensorflow_1.0/variable.py'
+--------------------------------------------------------------------------------
+
+

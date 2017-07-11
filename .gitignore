@@ -1,0 +1,12 @@
+.gitignore
+.idea/
+
+*.pyc
+*.pkl
+*.pickle
+
+/tensorflow/MNIST_data/
+/tensorflow_new/mnist/
+/pytorch/common/CIFAR10/
+/pytorch/common/mnist/
+/pytorch/files/
