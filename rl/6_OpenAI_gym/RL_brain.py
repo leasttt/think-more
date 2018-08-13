@@ -1,9 +1,18 @@
+"""
+This part of code is the DQN brain, which is a brain of the agent.
+All decisions are made in here.
+Using Tensorflow to build the neural network.
+
+View more on my tutorial page: https://morvanzhou.github.io/tutorials/
+
+Using:
+Tensorflow: 1.0
+gym: 0.8.0
+"""
+
 import numpy as np
-
+import pandas as pd
 import tensorflow as tf
-
-np.random.seed(1)
-tf.set_random_seed(1)
 
 
 # Deep Q Network off-policy
@@ -40,6 +49,9 @@ class DeepQNetwork:
 
         # consist of [target_net, evaluate_net]
         self._build_net()
+        t_params = tf.get_collection('target_net_params')
+        e_params = tf.get_collection('eval_net_params')
+        self.replace_target_op = [tf.assign(t, e) for t, e in zip(t_params, e_params)]
 
         self.sess = tf.Session()
 
@@ -79,7 +91,7 @@ class DeepQNetwork:
             self._train_op = tf.train.RMSPropOptimizer(self.lr).minimize(self.loss)
 
         # ------------------ build target_net ------------------
-        self.s_ = tf.placeholder(tf.float32, [None, self.n_features], name='s_')  # input
+        self.s_ = tf.placeholder(tf.float32, [None, self.n_features], name='s_')    # input
         with tf.variable_scope('target_net'):
             # c_names(collections_names) are the collections to store variables
             c_names = ['target_net_params', tf.GraphKeys.GLOBAL_VARIABLES]
@@ -120,15 +132,10 @@ class DeepQNetwork:
             action = np.random.randint(0, self.n_actions)
         return action
 
-    def _replace_target_params(self):
-        t_params = tf.get_collection('target_net_params')
-        e_params = tf.get_collection('eval_net_params')
-        self.sess.run([tf.assign(t, e) for t, e in zip(t_params, e_params)])
-
     def learn(self):
         # check to replace target parameters
         if self.learn_step_counter % self.replace_target_iter == 0:
-            self._replace_target_params()
+            self.sess.run(self.replace_target_op)
             print('\ntarget_params_replaced\n')
 
         # sample batch memory from all memory
@@ -154,22 +161,8 @@ class DeepQNetwork:
 
         q_target[batch_index, eval_act_index] = reward + self.gamma * np.max(q_next, axis=1)
 
-        # 下面这几步十分重要. q_next, q_eval 包含所有 action 的值,
-        # 而我们需要的只是已经选择好的 action 的值, 其他的并不需要.
-        # 所以我们将其他的 action 值全变成 0, 将用到的 action 误差值 反向传递回去, 作为更新凭据.
-        # 这是我们最终要达到的样子, 比如 q_target - q_eval = [1, 0, 0] - [-1, 0, 0] = [2, 0, 0]
-        # q_eval = [-1, 0, 0] 表示这一个记忆中有我选用过 action 0, 而 action 0 带来的 Q(s, a0) = -1, 所以其他的 Q(s, a1) = Q(s, a2) = 0.
-        # q_target = [1, 0, 0] 表示这个记忆中的 r+gamma*maxQ(s_) = 1, 而且不管在 s_ 上我们取了哪个 action,
-        # 我们都需要对应上 q_eval 中的 action 位置, 所以就将 1 放在了 action 0 的位置.
-
-        # 下面也是为了达到上面说的目的, 不过为了更方面让程序运算, 达到目的的过程有点不同.
-        # 是将 q_eval 全部赋值给 q_target, 这时 q_target-q_eval 全为 0,
-        # 不过 我们再根据 batch_memory 当中的 action 这个 column 来给 q_target 中的对应的 memory-action 位置来修改赋值.
-        # 使新的赋值为 reward + gamma * maxQ(s_), 这样 q_target-q_eval 就可以变成我们所需的样子.
-        # 具体在下面还有一个举例说明.
-
         """
-        假如在这个 batch 中, 我们有2个提取的记忆, 根据每个记忆可以生产3个 action 的值:
+        For example in this batch I have 2 samples and 3 actions:
         q_eval =
         [[1, 2, 3],
          [4, 5, 6]]
@@ -178,21 +171,20 @@ class DeepQNetwork:
         [[1, 2, 3],
          [4, 5, 6]]
 
-        然后根据 memory 当中的具体 action 位置来修改 q_target 对应 action 上的值:
-        比如在:
-            记忆 0 的 q_target 计算值是 -1, 而且我用了 action 0;
-            记忆 1 的 q_target 计算值是 -2, 而且我用了 action 2:
+        Then change q_target with the real q_target value w.r.t the q_eval's action.
+        For example in:
+            sample 0, I took action 0, and the max q_target value is -1;
+            sample 1, I took action 2, and the max q_target value is -2:
         q_target =
         [[-1, 2, 3],
          [4, 5, -2]]
 
-        所以 (q_target - q_eval) 就变成了:
+        So the (q_target - q_eval) becomes:
         [[(-1)-(1), 0, 0],
          [0, 0, (-2)-(6)]]
 
-        最后我们将这个 (q_target - q_eval) 当成误差, 反向传递会神经网络.
-        所有为 0 的 action 值是当时没有选择的 action, 之前有选择的 action 才有不为0的值.
-        我们只反向传递之前选择的 action 的值,
+        We then backpropagate this error w.r.t the corresponding action to network,
+        leave other action as error=0 cause we didn't choose it.
         """
 
         # train eval network
@@ -211,3 +203,6 @@ class DeepQNetwork:
         plt.ylabel('Cost')
         plt.xlabel('training steps')
         plt.show()
+
+
+

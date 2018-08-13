@@ -47,3 +47,16 @@ print(np.split(a, 2, axis=1))  # 按列分成2块
 print(np.array_split(a, 3, axis=1))  # 不等分割
 print(np.vsplit(a, 3))
 print("######################################5")
+
+c = np.array([1, 2, 3, 4])
+d = c.copy()  # deep copy
+print(d)
+
+e = np.arange(3, 15).reshape((3, 4))
+print(e[:2])
+print("######################################6")
+
+f = np.arange(1, 4)
+g = np.arange(5, 8)
+print(np.hstack((f, g)))
+print(np.hstack((f, [33, 44], g)))
